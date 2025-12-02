@@ -1,0 +1,7 @@
+pandas==2.3.3
+python-dotenv==1.2.1
+streamlit==1.51.0
+
+# dev dependencies
+black==25.11.0
+isort==7.0.0
