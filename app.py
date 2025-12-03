@@ -30,9 +30,9 @@ def get_pages() -> list:
         ),
         st.Page(f"{PAGES_PATH}/cashflow.py", title="Cashflow", icon=":material/table:"),
         st.Page(
-            f"{PAGES_PATH}/upload_data.py",
-            title="Upload Data",
-            icon=":material/file_upload:",
+            f"{PAGES_PATH}/database.py",
+            title="Database",
+            icon=":material/database:",
         ),
     ]
 
@@ -42,6 +42,7 @@ def get_pages() -> list:
 
 def app_layout() -> None:
     """Set up the Streamlit page configuration and run the selected page."""
+
     st.set_page_config(layout="wide", page_title="Personal Finance App")
     pages = st.navigation(get_pages())
     pages.run()
