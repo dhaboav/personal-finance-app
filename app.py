@@ -43,7 +43,7 @@ def get_pages() -> list:
 def app_layout() -> None:
     """Set up the Streamlit page configuration and run the selected page."""
 
-    st.set_page_config(layout="wide", page_title="Personal Finance App")
+    st.set_page_config(layout="wide")
     pages = st.navigation(get_pages())
     pages.run()
 
