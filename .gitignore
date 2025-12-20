@@ -4,4 +4,4 @@
 __pycache__/
 *.pyc
 
-data/finance.csv
+data/finance.db
