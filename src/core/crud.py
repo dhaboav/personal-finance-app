@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from sqlmodel import Session, select
 
-from src.core.models import Categories
+from src.core.models import Categories, Items, Labels
 
 
 class Crud:
@@ -31,6 +33,81 @@ class Crud:
         """
         try:
             stmt = Categories(name=name)
+            session.add(stmt)
+            session.commit()
+            session.refresh(stmt)
+            return True
+
+        except Exception:
+            return False
+
+    @staticmethod
+    def get_label(session: Session):
+        """Fetch all labels from the database
+
+        Args:
+            session (Session): The SQLAlchemy session used to interact with the database.
+
+        Returns:
+            list: A list of `Labels` objects retrieved from the database.
+        """
+        return session.exec(select(Labels)).all()
+
+    @staticmethod
+    def set_label(session: Session, name: str) -> bool:
+        """Add a new label to the database
+
+        Args:
+            session (Session): The SQLAlchemy session used to interact with the database.
+            name (str): The name of the new label to be added.
+
+        Returns:
+            bool: `True` if the label was successfully added, otherwise `False`.
+        """
+        try:
+            stmt = Labels(name=name)
+            session.add(stmt)
+            session.commit()
+            session.refresh(stmt)
+            return True
+
+        except Exception:
+            return False
+
+    @staticmethod
+    def get_item(session: Session):
+        """Fetch all items from the database
+
+        Args:
+            session (Session): The SQLAlchemy session used to interact with the database.
+
+        Returns:
+            list: A list of `Items` objects retrieved from the database.
+        """
+        return session.exec(select(Items)).all()
+
+    @staticmethod
+    def set_item(
+        session: Session,
+        date: datetime,
+        category: int,
+        name: str,
+        label: int,
+        total: int,
+    ) -> bool:
+        """Add a new item to the database
+
+        Args:
+            session (Session): The SQLAlchemy session used to interact with the database.
+            name (str): The name of the new item to be added.
+
+        Returns:
+            bool: `True` if the item was successfully added, otherwise `False`.
+        """
+        try:
+            stmt = Items(
+                date=date, category_id=category, name=name, label_id=label, total=total
+            )
             session.add(stmt)
             session.commit()
             session.refresh(stmt)

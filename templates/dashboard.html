@@ -1,0 +1,89 @@
+{% extends "index.html" %} {% block content %} {% set colors = { "Total Balance":
+"text-white", "Income": "text-green-400", "Expenses": "text-red-400", "Savings":
+"text-blue-400" } %}
+
+<div class="space-y-10">
+	<!-- Header -->
+	<div class="flex flex-row justify-between items-center">
+		<div>
+			<h2 class="text-3xl font-bold text-white">Dashboard</h2>
+			<p class="mt-1 text-gray-300">
+				Your financial overview at a glance
+			</p>
+		</div>
+		<select
+			hx-get="/items"
+			hx-target="#content"
+			hx-include="[name='month']"
+			name="month"
+			class="border border-gray-600 w-14 h-7 bg-slate-950 text-gray-400 text-center">
+			<option value="">全月</option>
+			{% for m in range(1, 13) %}
+			<option value="{{ m }}">{{ m }}月</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<!-- Summary -->
+	<div class="grid grid-cols-4 gap-6">
+		{% for title in ["Total Balance", "Income", "Expenses", "Savings"] %}
+		<div class="rounded-lg border border-slate-800 bg-slate-950 shadow-sm">
+			<div class="flex items-center justify-between px-4 py-2">
+				<p class="text-sm font-medium text-gray-500">{{ title }}</p>
+			</div>
+			<div class="px-4 py-2">
+				<div class="text-2xl font-bold {{ colors[title] }}">
+					Rp 12,450,000
+				</div>
+				<p class="mt-1 text-xs text-gray-500">+2.5% from last month</p>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<!-- Charts -->
+	<div class="grid grid-cols-2 gap-8">
+		<!-- Monthly Overview -->
+		<div class="rounded-lg border border-slate-800 bg-slate-950 shadow-sm">
+			<div class="border-b border-slate-800 p-4">
+				<h3 class="font-semibold text-gray-500">Monthly Overview</h3>
+			</div>
+			<div class="p-4">
+				<div
+					class="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-slate-800">
+					<p class="text-gray-500">
+						Monthly spending chart placeholder
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Category Breakdown -->
+		<div class="rounded-lg border border-slate-800 bg-slate-950 shadow-sm">
+			<div class="border-b border-slate-800 p-4">
+				<h3 class="font-semibold text-gray-500">Category Breakdown</h3>
+			</div>
+			<div class="p-4">
+				<div
+					class="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-slate-800">
+					<p class="text-gray-500">Category pie chart placeholder</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Spending Trends -->
+	<div class="rounded-lg border border-slate-800 bg-slate-950 shadow-sm">
+		<div class="border-b border-slate-800 bg-slate-950 p-4">
+			<h3 class="font-semibold text-gray-500">Spending Trends</h3>
+		</div>
+		<div class="p-4">
+			<div
+				class="flex h-48 items-center justify-center rounded-lg border-2 border-dashed border-slate-800">
+				<p class="text-gray-500">Trend line chart placeholder</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

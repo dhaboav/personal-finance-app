@@ -25,9 +25,9 @@ class Items(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     date: datetime
-    category: Optional[int] = Field(default=None, foreign_key="categories.id")
+    category_id: Optional[int] = Field(default=None, foreign_key="categories.id")
     categories: Optional[Categories] = Relationship(back_populates="items")
     name: str
-    label: Optional[int] = Field(default=None, foreign_key="labels.id")
+    label_id: Optional[int] = Field(default=None, foreign_key="labels.id")
     labels: Optional[Labels] = Relationship(back_populates="items")
     total: int
