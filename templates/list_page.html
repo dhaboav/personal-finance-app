@@ -20,7 +20,9 @@
 				<span class="text-sm font-semibold">Add Label</span>
 			</button>
 
+			<!-- Tombol Add Item -->
 			<button
+				id="add-item-btn"
 				class="flex items-center gap-2 border border-gray-600 rounded-lg text-black p-2 bg-green-400 hover:bg-green-400/80">
 				<i class="material-icons text-base leading-none">add_circle</i>
 				<span class="text-sm font-semibold">Add Item</span>
@@ -33,9 +35,127 @@
 		hx-get="/items"
 		hx-trigger="load"
 		hx-swap="innerHTML"
-		class="rounded-lg h-[30rem] overflow-auto">
-		{% include "components/table.html" %}
+		class="rounded-lg h-[30rem] overflow-auto"></div>
+</div>
+
+<!-- Popup Form Modal (disembunyikan awalnya) -->
+<div
+	id="add-item-modal"
+	class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden"
+	onclick="closeModal(event)">
+	<div class="bg-slate-800 rounded-lg shadow-lg w-96 p-6 relative text-white" onclick="event.stopPropagation()">
+		<!-- Close button -->
+		<div class="flex flex-row justify-between">
+            <div>
+                <h2 class="text-xl font-semibold">Add Item</h2>
+                <span>Record a new transaction</span>
+            </div>
+			
+			<button
+				class="text-gray-500 hover:text-red-400"
+				onclick="document.getElementById('add-item-modal').classList.add('hidden')">
+				<i class="material-icons text-lg">close</i>
+			</button>
+		</div>
+
+		<!-- Form -->
+		<form
+			hx-post="/items/add"
+			hx-target="#items-table"
+			hx-swap="innerHTML"
+			class="space-y-4 flex flex-col mt-4">
+			<div class="space-y-2">
+				<label for="date">Date</label>
+				<input
+					class="border-2 rounded-lg p-2 bg-slate-800 w-full focus:outline-green-400 focus:outline-2"
+					type="datetime-local"
+					name="date"
+					id="date" />
+			</div>
+			<div class="flex flex-row gap-4">
+				<div class="space-y-2">
+					<label for="name">Name</label>
+					<input
+						class="border-2 rounded-lg p-2 w-full bg-slate-800 focus:outline-green-400 focus:outline-2"
+						type="text"
+						name="name"
+						id="name" />
+				</div>
+				<div class="space-y-2">
+					<label for="amount">Amount</label>
+					<input
+						class="border-2 rounded-lg p-2 w-full bg-slate-800 focus:outline-green-400 focus:outline-2"
+						type="number"
+						name="total"
+						id="amount"
+						step="1000" />
+				</div>
+			</div>
+
+			<div class="flex flex-row gap-4">
+				<div class="space-y-2">
+					<label for="category">Category</label>
+					<select
+						class="border-2 rounded-lg p-2 w-full bg-slate-800 focus:outline-green-400 focus:outline-2"
+						name="category_id"
+						id="category">
+						<option value="">Loading...</option>
+						<!-- Placeholder -->
+					</select>
+				</div>
+
+				<div class="space-y-2">
+					<label for="label">Label</label>
+					<select
+						class="border-2 rounded-lg p-2 w-full bg-slate-800 focus:outline-green-400 focus:outline-2"
+						name="label_id"
+						id="label">
+						<option value="">Loading...</option>
+						<!-- Placeholder -->
+					</select>
+				</div>
+			</div>
+
+			<button
+				type="submit"
+				class="p-2 bg-green-400 text-white rounded-lg">
+				Submit
+			</button>
+		</form>
 	</div>
 </div>
+
+<script>
+	// Tampilkan modal saat tombol diklik
+	document
+		.getElementById("add-item-btn")
+		.addEventListener("click", function () {
+			// Tampilkan modal
+			document
+				.getElementById("add-item-modal")
+				.classList.remove("hidden");
+
+			// Memicu HTMX untuk memuat kategori
+			htmx.ajax("GET", "/category/", {
+				target: "#category", // Tempat untuk update dropdown
+				swap: "innerHTML", // Menukar innerHTML dengan hasil dari server
+			});
+
+			// Memicu HTMX untuk memuat label
+			htmx.ajax("GET", "/label/", {
+				target: "#label", // Tempat untuk update dropdown
+				swap: "innerHTML", // Menukar innerHTML dengan hasil dari server
+			});
+		});
+
+	// Menutup modal saat area luar modal diklik
+	function closeModal(event) {
+		// Hanya tutup modal jika yang diklik adalah area luar modal (overlay)
+		if (event.target === document.getElementById('add-item-modal')) {
+			document.getElementById("add-item-modal").classList.add("hidden");
+		}
+	}
+</script>
+
 
 {% endblock %}

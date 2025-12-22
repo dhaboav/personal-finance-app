@@ -27,15 +27,27 @@ def add_item(
     label_id: int = Form(...),
     total: int = Form(...),
 ):
+    """Add a new item to the database
 
-    if crud.set_item(session, date, category_id, name, label_id, total):
-        items = crud.get_item(session)
-        if items:
-            return {"Status": "Oks"}
+    Args:
+        session (Session): The database session injected by FastAPI.
+        date (datetime):
+        category_id (int):
+        name (str): The name of the new item.
+        label_id (int):
+        total (int):
+    """
+    crud.set_item(session, date, category_id, name, label_id, total)
 
 
 @router.delete("/delete/{id}")
 def delete_item(session: SessionDep, id: int):
+    """Delete an item from database with id
+
+    Args:
+        session (Session): The database session injected by FastAPI.
+        id (int): The id of item to be delete.
+    """
     if crud.delete_item(session, id):
         return Response(status_code=204, headers={"HX-Refresh": "true"})
     else:

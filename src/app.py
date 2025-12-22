@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from src.core import Crud, Database, SessionDep, templates
-from src.routes import items_route
+from src.routes import category_route, items_route
 
 
 @asynccontextmanager
@@ -18,6 +18,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Finance Tracker", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(items_route)
+app.include_router(category_route)
 
 crud = Crud()
 
@@ -49,25 +50,12 @@ def health_check_endpoint():
     return JSONResponse(content={"status": "ok"})
 
 
-@app.post("/category")
-def add_category(session: SessionDep, name: str):
-    """Add a new category to the database
-
-    Args:
-        session: The database session injected by FastAPI.
-        name: The name of the new category.
-
-    Returns:
-        JSON response indicating whether the category was added successfully.
-    """
-    if crud.set_category(session, name):
-        return JSONResponse(
-            content={"status": "success added new category"}, status_code=201
-        )
-    else:
-        return JSONResponse(
-            content={"status": "failed added new category"}, status_code=400
-        )
+@app.get("/label")
+def get_categories(request: Request, session: SessionDep):
+    labels = crud.get_label(session)
+    return templates.TemplateResponse(
+        "components/labels.html", {"request": request, "labels": labels}
+    )
 
 
 @app.post("/label")

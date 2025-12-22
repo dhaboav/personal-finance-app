@@ -14,8 +14,20 @@
 		{% for item in items %}
 		<tr class="border-b border-gray-700">
 			<td class="px-4 py-3">
-				{{ item.date.year }}年{{ item.date.month }}月{{ item.date.day
-				}}日
+				{% set hour = item.date.hour %}
+				{% set minute = item.date.minute %}
+				{% if hour == 0 %}
+					{% set time_of_day = "午前" %}
+					{% set hour_12 = 12 %}
+				{% elif hour >= 12 %}
+					{% set time_of_day = "午後" %}
+					{% set hour_12 = hour - 12 if hour > 12 else hour %}
+				{% else %}
+					{% set time_of_day = "午前" %}
+					{% set hour_12 = hour %}
+				{% endif %}
+				{{ item.date.year }}年{{ item.date.month }}月{{ item.date.day }}日 
+				{{ time_of_day }} {{ hour_12 }}:{{ "{:02d}".format(minute) }}
 			</td>
 			<td class="px-4 py-3">{{ item.categories.name }}</td>
 			<td class="px-4 py-3">{{ item.name }}</td>

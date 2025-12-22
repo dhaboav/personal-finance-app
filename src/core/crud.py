@@ -99,7 +99,11 @@ class Crud:
 
         Args:
             session (Session): The SQLAlchemy session used to interact with the database.
+            date (datetime):
+            category (int):
             name (str): The name of the new item to be added.
+            label (int):
+            total (int):
 
         Returns:
             bool: `True` if the item was successfully added, otherwise `False`.
@@ -122,7 +126,7 @@ class Crud:
 
         Args:
             session (Session): The SQLAlchemy session used to interact with the database.
-            id (int): The id of item to be delete.
+            item_id (int): The id of item to be delete.
 
         Returns:
             bool: `True` if the item was successfully deleted, otherwise `False`.

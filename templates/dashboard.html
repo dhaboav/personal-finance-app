@@ -12,10 +12,6 @@
 			</p>
 		</div>
 		<select
-			hx-get="/items"
-			hx-target="#content"
-			hx-include="[name='month']"
-			name="month"
 			class="border border-gray-600 w-14 h-7 bg-slate-950 text-gray-400 text-center">
 			<option value="">全月</option>
 			{% for m in range(1, 13) %}
