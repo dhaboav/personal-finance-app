@@ -1,0 +1,39 @@
+{% extends "index.html" %} {% block content %}
+
+<div class="space-y-10">
+	<div class="flex flex-row justify-between items-center">
+		<div>
+			<h2 class="text-3xl font-bold text-white">Items List</h2>
+			<p class="mt-1 text-gray-300">View all your transactions</p>
+		</div>
+
+		<div class="flex flex-row gap-2">
+			<button
+				class="flex items-center gap-2 border border-gray-600 rounded-lg text-gray-400 p-2 hover:bg-green-400/20">
+				<i class="material-icons text-base leading-none">library_add</i>
+				<span class="text-sm font-semibold">Add Category</span>
+			</button>
+
+			<button
+				class="flex items-center gap-2 border border-gray-600 rounded-lg text-gray-400 p-2 hover:bg-green-400/20">
+				<i class="material-icons text-base leading-none">new_label</i>
+				<span class="text-sm font-semibold">Add Label</span>
+			</button>
+
+			<button
+				class="flex items-center gap-2 border border-gray-600 rounded-lg text-black p-2 bg-green-400 hover:bg-green-400/80">
+				<i class="material-icons text-base leading-none">add_circle</i>
+				<span class="text-sm font-semibold">Add Item</span>
+			</button>
+		</div>
+	</div>
+
+	<div
+		id="items-table"
+		hx-get="/items/table"
+		hx-trigger="load"
+		hx-swap="innerHTML"
+		class="rounded-lg overflow-hidden"></div>
+</div>
+
+{% endblock %}

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, Form, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session
@@ -26,19 +26,27 @@ SessionDep = Annotated[Session, Depends(Database.get_session)]
 
 
 @app.get("/")
-def index(request: Request, session: SessionDep):
-    categories = crud.get_category(session)
-    labels = crud.get_label(session)
-    items = crud.get_item(session)
+def index(request: Request):
 
     return templates.TemplateResponse(
         "dashboard.html",
         {
             "request": request,
-            "categories": categories,
-            "labels": labels,
-            "items": items,
         },
+    )
+
+
+@app.get("/list")
+def list_page(request: Request):
+    return templates.TemplateResponse("list_page.html", {"request": request})
+
+
+@app.get("/items/table", response_class=HTMLResponse)
+def items_table(request: Request, session: SessionDep):
+    items = crud.get_item(session)
+    return templates.TemplateResponse(
+        "components/table.html",
+        {"request": request, "items": items},
     )
 
 
@@ -93,6 +101,7 @@ def add_label(session: SessionDep, name: str):
         return JSONResponse(
             content={"status": "failed added new label"}, status_code=400
         )
+
 
 @app.post("/items")
 def add_item(
