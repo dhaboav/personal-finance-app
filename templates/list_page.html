@@ -30,10 +30,12 @@
 
 	<div
 		id="items-table"
-		hx-get="/items/table"
+		hx-get="/items"
 		hx-trigger="load"
 		hx-swap="innerHTML"
-		class="rounded-lg overflow-hidden"></div>
+		class="rounded-lg h-[30rem] overflow-auto">
+		{% include "components/table.html" %}
+	</div>
 </div>
 
 {% endblock %}

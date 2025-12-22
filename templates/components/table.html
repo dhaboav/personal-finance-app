@@ -1,5 +1,5 @@
 <table class="w-full text-sm text-left text-gray-300">
-	<thead class="text-xs uppercase bg-gray-800">
+	<thead class="sticky top-0 z-0 text-xs uppercase bg-gray-800">
 		<tr>
 			<th class="px-4 py-3">Date</th>
 			<th class="px-4 py-3">Category</th>
@@ -32,6 +32,8 @@
 					>
 				</button>
 				<button
+                    hx-delete="/items/delete/{{ item.id }}"
+                    hx-confirm="Are you sure you want to delete this item?"
 					class="flex items-center gap-2 rounded-lg text-gray-400 p-2 hover:bg-green-400/20">
 					<i
 						class="material-icons text-base leading-none text-red-400"

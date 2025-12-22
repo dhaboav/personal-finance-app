@@ -1,14 +1,11 @@
 from contextlib import asynccontextmanager
-from datetime import datetime
-from typing import Annotated
 
-from fastapi import Depends, FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from sqlmodel import Session
 
-from src.core import Crud, Database
+from src.core import Crud, Database, SessionDep, templates
+from src.routes import items_route
 
 
 @asynccontextmanager
@@ -20,9 +17,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Finance Tracker", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+app.include_router(items_route)
+
 crud = Crud()
-SessionDep = Annotated[Session, Depends(Database.get_session)]
 
 
 @app.get("/")
@@ -39,15 +36,6 @@ def index(request: Request):
 @app.get("/list")
 def list_page(request: Request):
     return templates.TemplateResponse("list_page.html", {"request": request})
-
-
-@app.get("/items/table", response_class=HTMLResponse)
-def items_table(request: Request, session: SessionDep):
-    items = crud.get_item(session)
-    return templates.TemplateResponse(
-        "components/table.html",
-        {"request": request, "items": items},
-    )
 
 
 @app.get("/health", include_in_schema=False)
@@ -100,26 +88,4 @@ def add_label(session: SessionDep, name: str):
     else:
         return JSONResponse(
             content={"status": "failed added new label"}, status_code=400
-        )
-
-
-@app.post("/items")
-def add_item(
-    request: Request,
-    session: SessionDep,
-    date: datetime = Form(...),
-    category_id: int = Form(...),
-    name: str = Form(...),
-    label_id: int = Form(...),
-    total: int = Form(...),
-):
-
-    if crud.set_item(session, date, category_id, name, label_id, total):
-        items = crud.get_item(session)
-        return templates.TemplateResponse(
-            "partials/item_table.html",
-            {
-                "request": request,
-                "items": items,
-            },
         )

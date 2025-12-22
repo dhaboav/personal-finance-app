@@ -115,3 +115,24 @@ class Crud:
 
         except Exception:
             return False
+
+    @staticmethod
+    def delete_item(session: Session, item_id: int) -> bool:
+        """Delete an item from database
+
+        Args:
+            session (Session): The SQLAlchemy session used to interact with the database.
+            id (int): The id of item to be delete.
+
+        Returns:
+            bool: `True` if the item was successfully deleted, otherwise `False`.
+        """
+        try:
+            stmt = select(Items).where(Items.id == item_id)
+            item = session.exec(stmt).one()
+            session.delete(item)
+            session.commit()
+            return True
+
+        except:
+            return False
